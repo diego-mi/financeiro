@@ -1,0 +1,30 @@
+<h2>Lançar</h2>
+
+<?php
+    /**
+     * @var $form \Zend\Form\Form
+     */
+    $form = $this->form;
+
+    $this->formElementErrors()
+        ->setMessageOpenFormat ('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>')
+        ->setMessageCloseString ('</div>')
+        ->render ($form);
+
+    $form->setAttribute('action', $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'inserir')));
+
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+
+    echo $this->formCollection($form);
+
+    echo $this->form()->closeTag();
+?>
+
+<style type="text/css">
+    input, textarea, label, select {
+      display: block;
+    }
+</style>
+

@@ -1,0 +1,29 @@
+<a class="btn btn-success" href="<?php echo $this->url('origem/default', array('controller' => 'origem', 'action' => 'inserir')); ?>">Cadastar</a>
+<hr>
+
+<form id="form-grid" action="" method="post">
+    <table class="table table-bordered table-striped table-hover table-condensed">
+        <caption>Todas os Posts</caption>
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Saldo Inicial</th>
+            <th>Saldo Atual</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php foreach( $this->data as $entity): ?>
+            <tr>
+                <td><?php echo $entity->getName(); ?></td>
+                <td><?php echo $entity->getSaldoInicial(); ?></td>
+                <td><?php echo $entity->getSaldoAtual(); ?></td>
+                <td>
+                    <a class="btn btn-success" href="<?php echo $this->url('origem/default', array('controller' => 'origem', 'action' => 'editar', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-pencil"></i> </a>
+                    <a class="btn btn-danger" href="<?php echo $this->url('origem/default', array('controller' => 'origem', 'action' => 'excluir', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-remove-sign"></i> </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</form>
