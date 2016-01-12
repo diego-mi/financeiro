@@ -64,11 +64,6 @@ abstract class AbstractCrudController extends AbstractFormController
                 } catch (\Exception $objException) {
                     $this->flashMessenger()->addErrorMessage($objException->getMessage());
                 }
-
-                return $this->redirect()->toRoute(
-                    $this->route,
-                    array('controller' => $this->controller, 'action' => 'editar')
-                );
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     "Formulário inválido, verifique os dados inseridos e tente novamente"

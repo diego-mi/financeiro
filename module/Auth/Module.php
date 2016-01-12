@@ -33,7 +33,7 @@ class Module
                 if ($auth->hasIdentity()) {
                     if ($ev->getRouteMatch()->getParam('controller') == "Auth\Controller\Auth") {
                         if ($ev->getRouteMatch()->getParam('action') == 'login') {
-                            return $t->redirect()->toRoute('post');
+                            return $t->redirect()->toRoute('categoria');
                         }
                     }
                 } else {

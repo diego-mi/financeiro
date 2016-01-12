@@ -93,11 +93,21 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
             ));
         $this->add($valorFinal);
 
-        //Input Saldo Inicial
-        $tipo = new Text('tipo');
+        $tipo = new ObjectSelect('tipo');
         $tipo->setLabel('Tipo')
-            ->setAttributes(array(
-                'maxlength' => 1
+            ->setOptions(array(
+                'object_manager' => $this->getObjectManager(),
+                'target_class' => 'Tipo\Entity\Tipo',
+                'property' => 'name',
+                'empty_option' => '--Selecione--',
+                'is_method' => true,
+                'find_method' => array(
+                    'name' => 'findBy',
+                    'params' => array(
+                        'criteria' => array(),
+                        'orderBy' => array('name' => 'ASC'),
+                    ),
+                ),
             ));
         $this->add($tipo);
 
@@ -114,7 +124,8 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
             new LancamentosFilter(
                 $categoria->getValueOptions(),
                 $operacao->getValueOptions(),
-                $origem->getValueOptions()
+                $origem->getValueOptions(),
+                $tipo->getValueOptions()
             )
         );
     }

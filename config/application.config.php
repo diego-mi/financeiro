@@ -9,7 +9,8 @@ return array(
         'Categoria',
         'Operacoes',
         'Origem',
-        'Lancamentos'
+        'Lancamentos',
+        'Tipo'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

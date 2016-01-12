@@ -1,0 +1,41 @@
+<a class="btn btn-success"
+   href="<?php echo $this->url('tipo/default', array('controller' => 'tipo', 'action' => 'inserir')); ?>">Cadastar</a>
+<hr>
+
+<h1>Todas os tipos</h1>
+
+<table class="table table-bordered table-striped table-hover table-condensed">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Nome</th>
+        <th>Icone</th>
+        <th>Ação</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if ($this->data): ?>
+        <?php foreach ($this->data as $entity): ?>
+            <tr>
+                <td><?php echo $entity->getId(); ?></td>
+                <td><?php echo $entity->getName(); ?></td>
+                <td>
+                    <i class="<?php echo $entity->getIcon(); ?>" aria-hidden="true"></i>
+                </td>
+                <td>
+                    <a class="btn btn-success" href="<?php echo $this->url('tipo/default',
+                        array('controller' => 'tipo', 'action' => 'editar', 'id' => $entity->getId())); ?>"><i
+                            class="glyphicon glyphicon-pencil"></i> </a>
+                    <a class="btn btn-danger" href="<?php echo $this->url('tipo/default',
+                        array('controller' => 'tipo', 'action' => 'excluir', 'id' => $entity->getId())); ?>"><i
+                            class="glyphicon glyphicon-remove-sign"></i> </a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Nenhum registro encontrado!</p>
+    <?php endif; ?>
+
+
+    </tbody>
+</table>

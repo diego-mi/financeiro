@@ -1,14 +1,14 @@
 <?php
-namespace Categoria;
+namespace Tipo;
 
-use Categoria\Service\CategoriaService;
-use Categoria\Form\CategoriaForm;
+use Tipo\Service\TipoService;
+use Tipo\Form\TipoForm;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
 /**
  * Class Module
- * @package Categoria
+ * @package Tipo
  */
 class Module
 {
@@ -51,11 +51,11 @@ class Module
     {
         return array(
             'factories' => array(
-                'Categoria\Service\CategoriaService' => function ($em) {
-                    return new CategoriaService($em->get('Doctrine\ORM\EntityManager'));
+                'Tipo\Service\TipoService' => function ($em) {
+                    return new TipoService($em->get('Doctrine\ORM\EntityManager'));
                 },
-                'Categoria\Form\CategoriaForm' => function ($em) {
-                    return new CategoriaForm($em->get('Doctrine\ORM\EntityManager'));
+                'Tipo\Form\TipoForm' => function ($em) {
+                    return new TipoForm($em->get('Doctrine\ORM\EntityManager'));
                 }
             )
         );

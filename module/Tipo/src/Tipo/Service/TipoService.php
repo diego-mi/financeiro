@@ -1,14 +1,14 @@
 <?php
-namespace Categoria\Service;
+namespace Tipo\Service;
 
 use Base\Service\AbstractService;
 use Doctrine\ORM\EntityManager;
 
-class CategoriaService extends AbstractService
+class TipoService extends AbstractService
 {
     public function __construct(EntityManager $em)
     {
-        $this->strEntity = 'Categoria\Entity\Categoria';
+        $this->strEntity = 'Tipo\Entity\Tipo';
         parent::__construct($em);
     }
 

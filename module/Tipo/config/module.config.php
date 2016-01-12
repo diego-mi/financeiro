@@ -1,15 +1,15 @@
 <?php
-namespace Categoria;
+namespace Tipo;
 
 return array(
     'router' => array(
         'routes' => array(
-            'categoria' => array(
+            'tipo' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/categoria',
+                    'route'    => '/tipo',
                     'defaults' => array(
-                        'controller' => 'Categoria\Controller\Index',
+                        'controller' => 'Tipo\Controller\Index',
                         'action'     => 'index',
                     ),
                 ),
@@ -34,7 +34,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Categoria\Controller\Index' => 'Categoria\Controller\IndexController'
+            'Tipo\Controller\Index' => 'Tipo\Controller\IndexController'
         ),
     ),
     'view_manager' => array(

@@ -1,18 +1,17 @@
 <?php
 
-namespace Categoria\Entity;
+namespace Tipo\Entity;
 
 use Base\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Category
+ * Tipo
  *
- * @ORM\Table(name="categoria")
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="Categoria\Entity\CategoriaRepository")
+ * @ORM\Table(name="tipo")
+ * @ORM\Entity(repositoryClass="Tipo\Entity\TipoRepository")
  */
-class Categoria extends AbstractEntity
+class Tipo extends AbstractEntity
 {
     /**
      * @var integer
@@ -26,14 +25,21 @@ class Categoria extends AbstractEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", length=50, nullable=false)
+     */
+    private $icon;
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -57,10 +63,26 @@ class Categoria extends AbstractEntity
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param string $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
     }
 }

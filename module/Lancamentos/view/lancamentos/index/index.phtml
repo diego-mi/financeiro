@@ -3,16 +3,16 @@
 
 <h2>Todos os Lançamentos</h2>
 <form id="form-grid" action="" method="post">
-    <table class="table table-striped table-hover table-condensed">
+    <table class="table table-striped table-hover table-condensed table-bordered">
         <thead>
         <tr>
-            <th>Categoria</th>
-            <th>Origem</th>
-            <th>Operação</th>
-            <th>Valor Inicial</th>
-            <th>Valor Final</th>
-            <th>Tipo</th>
-            <th>AÇÃO</th>
+            <th class="text-center">Categoria</th>
+            <th class="text-center">Origem</th>
+            <th class="text-center">Operação</th>
+            <th class="text-center">Valor Inicial (R$)</th>
+            <th class="text-center">Valor Final (R$)</th>
+            <th class="text-center">Tipo</th>
+            <th class="text-center">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -21,12 +21,12 @@
                 <td><?php echo $entity->getCategoria()->getName(); ?></td>
                 <td><?php echo $entity->getOrigem()->getName(); ?></td>
                 <td><?php echo $entity->getOperacao()->getName(); ?></td>
-                <td><?php echo $entity->getValorInicial(); ?></td>
-                <td><?php echo $entity->getValorFinal(); ?></td>
-                <td>
+                <td class="text-right"><?php echo $entity->getValorInicial(); ?></td>
+                <td class="text-right"><?php echo $entity->getValorFinal(); ?></td>
+                <td class="text-center">
                     <i class="<?php echo $entity->getTipo()->getIcon(); ?>" aria-hidden="true"></i>
                 </td>
-                <td>
+                <td class="text-center">
                     <a class="btn btn-sm btn-success" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'editar', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-pencil"></i> </a>
                     <a class="btn btn-sm btn-danger" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'excluir', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-remove-sign"></i> </a>
                 </td>

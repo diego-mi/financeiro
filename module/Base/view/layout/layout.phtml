@@ -1,4 +1,7 @@
-<?php echo $this->doctype(); ?>
+<?php
+echo $this->doctype();
+$strPageNamespace = $this->viewModel()->getCurrent()->getChildren()[0]->getTemplate();
+?>
 
 <html lang="en">
 <head>
@@ -49,21 +52,41 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-<!--                <li class="active">-->
-<!--                    <a href="--><?php //echo $this->url('post', array('action' => 'default')); ?><!--">Home</a>-->
-<!--                </li>-->
-                <li>
-                    <a href="<?php echo $this->url('categoria', array('action' => 'default')); ?>">Categoria</a>
+                <!-- init li::categoria -->
+                <li class="<?php if ($strPageNamespace == 'categoria/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('categoria', array('action' => 'default')); ?>">
+                        Categoria
+                    </a>
                 </li>
-                <li>
-                    <a href="<?php echo $this->url('operacoes', array('action' => 'default')); ?>">Operações</a>
+                <!-- end li::categoria -->
+                <!-- init li::operacoes -->
+                <li class="<?php if ($strPageNamespace == 'operacoes/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('operacoes', array('action' => 'default')); ?>">
+                        Operações
+                    </a>
                 </li>
-                <li>
-                    <a href="<?php echo $this->url('origem', array('action' => 'default')); ?>">Origem</a>
+                <!-- end li::operacoes -->
+                <!-- init li::origem -->
+                <li class="<?php if ($strPageNamespace == 'origem/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('origem', array('action' => 'default')); ?>">
+                        Origem
+                    </a>
                 </li>
-                <li>
-                    <a href="<?php echo $this->url('lancamentos', array('action' => 'default')); ?>">Lançamentos</a>
+                <!-- end li::origem -->
+                <!-- init li::tipo -->
+                <li class="<?php if ($strPageNamespace == 'tipo/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('tipo', array('action' => 'default')); ?>">
+                        Tipo
+                    </a>
                 </li>
+                <!-- end li::tipo -->
+                <!-- init li::lancamentos -->
+                <li class="<?php if ($strPageNamespace == 'lancamentos/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('lancamentos', array('action' => 'default')); ?>">
+                        Lançamentos
+                    </a>
+                </li>
+                <!-- end li::lancamentos -->
             </ul>
         </div><!--/.nav-collapse -->
     </div>

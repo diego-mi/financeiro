@@ -45,6 +45,7 @@ abstract class AbstractService
 
             return $entity;
         } catch (\Doctrine\DBAL\ConnectionException $objError) {
+            var_dump($objError);
             return $objError;
         }
     }

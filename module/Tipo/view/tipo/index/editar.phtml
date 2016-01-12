@@ -1,0 +1,32 @@
+<h2>Editar Tipo</h2>
+
+<?php
+/**
+ * @var $form \Zend\Form\Form
+ */
+$form = $this->form;
+
+$this->formElementErrors()
+    ->setMessageOpenFormat('<p class="text-error>')
+    ->setMessageCloseString('</p>')
+    ->render($form);
+
+$form->setAttribute('action',
+    $this->url('tipo/default', array('controller' => 'tipo', 'action' => 'editar', 'id' => $this->id)));
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+foreach ($form as $element) {
+    echo($element->getOpentag());
+    if ($element->getAttribute('type') != 'submit') {
+        echo($this->formLabel($element));
+    }
+    echo($this->formInput($element));
+    echo($this->formElementErrors($element));
+    echo($element->getClosetag());
+}
+
+echo $this->form()->closeTag();
+?>
