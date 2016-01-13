@@ -11,10 +11,18 @@ use Zend\Form\Form;
 
 use Lancamentos\Form\LancamentosFilter;
 
+/**
+ * Class LancamentosForm
+ * @package Lancamentos\Form
+ */
 class LancamentosForm extends Form implements ObjectManagerAwareInterface
 {
     protected $objectManager;
 
+    /**
+     * LancamentosForm constructor.
+     * @param ObjectManager $objectManager
+     */
     public function __construct(ObjectManager $objectManager)
     {
         $this->setObjectManager($objectManager);
@@ -22,6 +30,28 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
         parent::__construct(null);
         $this->setAttribute('method', 'POST');
         $this->setAttribute('class', 'form-horizontal');
+
+
+        $prioridade = new ObjectSelect('prioridade');
+        $prioridade->setLabel('Prioridade')
+            ->setOptions(array(
+                'object_manager' => $this->getObjectManager(),
+                'target_class' => 'Prioridade\Entity\Prioridade',
+                'property' => 'name',
+                'empty_option' => '--Selecione--',
+                'is_method' => true,
+                'find_method' => array(
+                    'name' => 'findBy',
+                    'params' => array(
+                        'criteria' => array(),
+                        'orderBy' => array('name' => 'ASC'),
+                    ),
+                ),
+            ))
+            ->setAttributes(array(
+                'class' => 'form-control'
+            ));
+        $this->add($prioridade);
 
         $categoria = new ObjectSelect('categoria');
         $categoria->setLabel('Categoria')
@@ -38,6 +68,9 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
                         'orderBy' => array('name' => 'ASC'),
                     ),
                 ),
+            ))
+            ->setAttributes(array(
+                'class' => 'form-control'
             ));
         $this->add($categoria);
 
@@ -56,6 +89,9 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
                         'orderBy' => array('name' => 'ASC'),
                     ),
                 ),
+            ))
+            ->setAttributes(array(
+                'class' => 'form-control'
             ));
         $this->add($operacao);
 
@@ -74,6 +110,9 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
                         'orderBy' => array('name' => 'ASC'),
                     ),
                 ),
+            ))
+            ->setAttributes(array(
+                'class' => 'form-control'
             ));
         $this->add($origem);
 
@@ -81,7 +120,8 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
         $valorInicial = new Text('valorInicial');
         $valorInicial->setLabel('Valor Inicial')
             ->setAttributes(array(
-                'maxlength' => 10
+                'maxlength' => 10,
+                'class' => 'form-control'
             ));
         $this->add($valorInicial);
 
@@ -89,7 +129,8 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
         $valorFinal = new Text('valorFinal');
         $valorFinal->setLabel('Valor Final')
             ->setAttributes(array(
-                'maxlength' => 10
+                'maxlength' => 10,
+                'class' => 'form-control'
             ));
         $this->add($valorFinal);
 
@@ -108,33 +149,18 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
                         'orderBy' => array('name' => 'ASC'),
                     ),
                 ),
+            ))
+            ->setAttributes(array(
+                'class' => 'form-control'
             ));
         $this->add($tipo);
 
-        $prioridade = new ObjectSelect('prioridade');
-        $prioridade->setLabel('Prioridade')
-            ->setOptions(array(
-                'object_manager' => $this->getObjectManager(),
-                'target_class' => 'Prioridade\Entity\Prioridade',
-                'property' => 'name',
-                'empty_option' => '--Selecione--',
-                'is_method' => true,
-                'find_method' => array(
-                    'name' => 'findBy',
-                    'params' => array(
-                        'criteria' => array(),
-                        'orderBy' => array('name' => 'ASC'),
-                    ),
-                ),
-            ));
-        $this->add($prioridade);
-
         //Botao submit
         $button = new Button('submit');
-        $button->setLabel('Salvar')
-            ->setAttributes(array(
+        $button->setAttributes(array(
                 'type' => 'submit',
-                'class' => 'btn'
+                'class' => 'btn btn-success',
+                'value' => 'Salvar'
             ));
         $this->add($button);
 

@@ -11,7 +11,8 @@ return array(
         'Origem',
         'Lancamentos',
         'Tipo',
-        'Prioridade'
+        'Prioridade',
+        'Gerador'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

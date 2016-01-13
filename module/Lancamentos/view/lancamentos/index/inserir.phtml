@@ -1,31 +1,52 @@
 <h2>Lançar</h2>
 
 <?php
-    /**
-     * @var $form \Zend\Form\Form
-     */
-    $form = $this->form;
+/**
+ * @var $form \Zend\Form\Form
+ */
+$form = $this->form;
+$formLabel = $this->plugin('formLabel');
 
+$this->formElementErrors()
+    ->setMessageOpenFormat('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>')
+    ->setMessageCloseString('</div>')
+    ->render($form);
 
-    $this->formElementErrors()
-        ->setMessageOpenFormat ('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>')
-        ->setMessageCloseString ('</div>')
-        ->render ($form);
+$form->setAttribute('action',
+    $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'inserir')));
 
-    $form->setAttribute('action', $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'inserir')));
+$form->prepare();
 
-    $form->prepare();
+echo $this->form()->openTag($form);
 
-    echo $this->form()->openTag($form);
+?>
+<div class="col-lg-12">
+    <?php
 
-    echo $this->formCollection($form);
+    foreach ($form as $element) { ?>
+        <div class="form-group">
+            <?php
+            if ($element->getAttribute('type') != 'submit') {
+                echo ('<label for="' . $element->getAttribute('id') .'">'. $element->getLabel() . '</label>');
+                echo($this->formElement($element));
+            } else {
+                echo($this->formInput($element));
+            }
+            echo($this->formElementErrors($element));
+            ?>
+        </div>
+        <?php
+    }
+    ?>
+</div>
+<?php
 
-    echo $this->form()->closeTag();
+echo $this->form()->closeTag();
 ?>
 
 <style type="text/css">
     input, textarea, label, select {
-      display: block;
+        display: block;
     }
 </style>
 

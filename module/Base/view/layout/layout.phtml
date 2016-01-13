@@ -26,6 +26,7 @@ $strPageNamespace = $this->viewModel()->getCurrent()->getChildren()[0]->getTempl
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Scripts -->
     <?php echo $this->headScript()
@@ -81,19 +82,38 @@ $strPageNamespace = $this->viewModel()->getCurrent()->getChildren()[0]->getTempl
                 </li>
                 <!-- end li::tipo -->
                 <!-- init li::prioridade -->
-                <li class="<?php if ($strPageNamespace == 'prioridade/index/index') {echo('active');} ?>">
-                    <a href="<?php echo $this->url('prioridade', array('action' => 'default')); ?>">
-                        Prioridade
-                    </a>
+                <li class="dropdown" class="<?php if ($strPageNamespace == 'prioridade/index/index') {echo('active');} ?>">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prioridade <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo $this->url('prioridade', array('action' => 'default')); ?>">Listar Todos</a></li>
+                        <li>
+                            <a href="<?php echo $this->url('prioridade/default', array('controller' => 'prioridade', 'action' => 'inserir')); ?>">Adicionar</a>
+                        </li>
+                    </ul>
                 </li>
                 <!-- end li::prioridade -->
                 <!-- init li::lancamentos -->
-                <li class="<?php if ($strPageNamespace == 'lancamentos/index/index') {echo('active');} ?>">
-                    <a href="<?php echo $this->url('lancamentos', array('action' => 'default')); ?>">
-                        Lançamentos
-                    </a>
+                <li class="dropdown" class="<?php if ($strPageNamespace == 'lancamentos/index/index') {echo('active');} ?>">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lançamentos <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo $this->url('lancamentos', array('action' => 'default')); ?>">Listar Todos</a></li>
+                        <li>
+                            <a href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'inserir')); ?>">Adicionar</a>
+                        </li>
+                    </ul>
                 </li>
                 <!-- end li::lancamentos -->
+                <!-- init li::gerador -->
+                <li class="dropdown" class="<?php if ($strPageNamespace == 'gerador/index/index') {echo('active');} ?>">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gerador <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo $this->url('gerador', array('action' => 'default')); ?>">Index</a></li>
+                        <li>
+                            <a href="<?php echo $this->url('gerador/default', array('controller' => 'gerador', 'action' => 'criarController')); ?>">Criar Controller</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- end li::gerador -->
             </ul>
         </div><!--/.nav-collapse -->
     </div>

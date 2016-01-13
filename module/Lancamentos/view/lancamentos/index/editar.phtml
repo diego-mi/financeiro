@@ -17,7 +17,15 @@
 
     echo $this->form()->openTag($form);
 
-    echo $this->formCollection($form);
+    foreach ($form as $element) {
+        echo($element->getOpentag());
+        if ($element->getAttribute('type') != 'submit') {
+            echo($this->formLabel($element));
+        }
+        echo($this->formInput($element));
+        echo($this->formElementErrors($element));
+        echo($element->getClosetag());
+    }
 
     echo $this->form()->closeTag();
 ?>
