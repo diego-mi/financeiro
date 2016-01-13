@@ -21,8 +21,8 @@ use Zend\Stdlib\ArrayUtils;
 use Zend\Validator\ValidatorChain;
 
 /**
- * Plugin to help facilitate Origem/Redirect/Get for file upload forms
- * (http://en.wikipedia.org/wiki/Origem/Redirect/Get)
+ * Plugin to help facilitate Post/Redirect/Get for file upload forms
+ * (http://en.wikipedia.org/wiki/Post/Redirect/Get)
  *
  * Requires that the Form's File inputs contain a 'fileRenameUpload' filter
  * with the target option set: 'target' => /valid/target/path'.

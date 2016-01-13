@@ -111,6 +111,24 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
             ));
         $this->add($tipo);
 
+        $prioridade = new ObjectSelect('prioridade');
+        $prioridade->setLabel('Prioridade')
+            ->setOptions(array(
+                'object_manager' => $this->getObjectManager(),
+                'target_class' => 'Prioridade\Entity\Prioridade',
+                'property' => 'name',
+                'empty_option' => '--Selecione--',
+                'is_method' => true,
+                'find_method' => array(
+                    'name' => 'findBy',
+                    'params' => array(
+                        'criteria' => array(),
+                        'orderBy' => array('name' => 'ASC'),
+                    ),
+                ),
+            ));
+        $this->add($prioridade);
+
         //Botao submit
         $button = new Button('submit');
         $button->setLabel('Salvar')
@@ -125,7 +143,8 @@ class LancamentosForm extends Form implements ObjectManagerAwareInterface
                 $categoria->getValueOptions(),
                 $operacao->getValueOptions(),
                 $origem->getValueOptions(),
-                $tipo->getValueOptions()
+                $tipo->getValueOptions(),
+                $prioridade->getValueOptions()
             )
         );
     }

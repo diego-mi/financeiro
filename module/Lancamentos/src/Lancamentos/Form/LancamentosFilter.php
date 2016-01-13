@@ -13,17 +13,21 @@ class LancamentosFilter extends InputFilter
     protected $categoria;
     protected $operacao;
     protected $origem;
+    protected $tipo;
+    protected $prioridade;
 
     public function __construct(
         Array $categoria = array(),
         Array $operacao = array(),
         Array $origem = array(),
-        Array $tipo = array()
+        Array $tipo = array(),
+        Array $prioridade = array()
     ) {
         $this->categoria = $categoria;
         $this->operacao = $operacao;
         $this->origem = $origem;
         $this->tipo = $tipo;
+        $this->prioridade = $prioridade;
 
         $arrCategoria = new InArray();
         $arrCategoria->setOptions(array('haystack' => $this->haystack($this->categoria)));
@@ -77,6 +81,15 @@ class LancamentosFilter extends InputFilter
             ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
         $tipo->getValidatorChain()->attach($arrTipo);
         $this->add($tipo);
+
+        $arrPrioridade = new InArray();
+        $arrPrioridade->setOptions(array('haystack' => $this->haystack($this->prioridade)));
+
+        $prioridade = new Input('prioridade');
+        $prioridade->setRequired(true)
+            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
+        $prioridade->getValidatorChain()->attach($arrPrioridade);
+        $this->add($prioridade);
     }
 
     /**

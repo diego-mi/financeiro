@@ -14,7 +14,7 @@ use Zend\Mvc\Exception\RuntimeException;
 use Zend\Session\Container;
 
 /**
- * Plugin to help facilitate Origem/Redirect/Get (http://en.wikipedia.org/wiki/Origem/Redirect/Get)
+ * Plugin to help facilitate Post/Redirect/Get (http://en.wikipedia.org/wiki/Post/Redirect/Get)
  */
 class PostRedirectGet extends AbstractPlugin
 {

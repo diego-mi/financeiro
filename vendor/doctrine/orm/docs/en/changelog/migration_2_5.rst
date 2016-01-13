@@ -198,7 +198,7 @@ lazy collection when using ``Collection::matching($criteria)``:
 
     <?php
 
-    class Origem
+    class Post
     {
         /** @OneToMany(targetEntity="Comment", fetch="EXTRA_LAZY") */
         private $comments;

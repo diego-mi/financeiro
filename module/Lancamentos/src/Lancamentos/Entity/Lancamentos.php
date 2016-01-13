@@ -59,6 +59,16 @@ class Lancamentos extends AbstractEntity
     private $origem;
 
     /**
+     * @var \Prioridade\Entity\Prioridade
+     *
+     * @ORM\ManyToOne(targetEntity="Prioridade\Entity\Prioridade")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="prioridade", referencedColumnName="id")
+     * })
+     */
+    private $prioridade;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="valor_inicial", type="float", length=10, nullable=false)
@@ -194,5 +204,21 @@ class Lancamentos extends AbstractEntity
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
+    }
+
+    /**
+     * @return \Prioridade\Entity\Prioridade
+     */
+    public function getPrioridade()
+    {
+        return $this->prioridade;
+    }
+
+    /**
+     * @param \Prioridade\Entity\Prioridade $prioridade
+     */
+    public function setPrioridade($prioridade)
+    {
+        $this->prioridade = $prioridade;
     }
 }

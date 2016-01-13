@@ -12,8 +12,7 @@
         "zendframework/zendframework": "~2.5"
     },
     "require-dev": {
-        "doctrine/doctrine-orm-module": "0.8.0",
-        "hounddog/doctrine-data-fixture-module": "dev-master"
+        "doctrine/doctrine-orm-module": "0.8.0"
     },
     "config": {
         "bin-dir": "bin"

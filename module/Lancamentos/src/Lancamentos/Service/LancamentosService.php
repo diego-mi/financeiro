@@ -27,9 +27,9 @@ class LancamentosService extends AbstractService
             ->find($data['origem']);
         $data['tipo'] = $this->em->getRepository('Tipo\Entity\Tipo')
             ->find($data['tipo']);
+        $data['prioridade'] = $this->em->getRepository('Prioridade\Entity\Prioridade')
+            ->find($data['prioridade']);
 
         return parent::save($data);
     }
-
-
 }

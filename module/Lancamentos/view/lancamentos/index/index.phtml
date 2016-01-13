@@ -6,6 +6,7 @@
     <table class="table table-striped table-hover table-condensed table-bordered">
         <thead>
         <tr>
+            <th class="text-center">Prioridade</th>
             <th class="text-center">Categoria</th>
             <th class="text-center">Origem</th>
             <th class="text-center">Operação</th>
@@ -18,17 +19,34 @@
         <tbody>
             <?php foreach( $this->data as $entity): ?>
             <tr>
-                <td><?php echo $entity->getCategoria()->getName(); ?></td>
-                <td><?php echo $entity->getOrigem()->getName(); ?></td>
-                <td><?php echo $entity->getOperacao()->getName(); ?></td>
-                <td class="text-right"><?php echo $entity->getValorInicial(); ?></td>
-                <td class="text-right"><?php echo $entity->getValorFinal(); ?></td>
+                <td class="text-center" title="<?php echo $entity->getPrioridade()->getName(); ?>">
+                    <i class="<?php echo $entity->getPrioridade()->getIcon(); ?>" aria-hidden="true"></i>
+                </td>
+                <td class="text-center"><?php echo $entity->getCategoria()->getName(); ?></td>
+                <td class="text-center"><?php echo $entity->getOrigem()->getName(); ?></td>
+                <td class="text-center"><?php echo $entity->getOperacao()->getName(); ?></td>
+                <td class="text-right">
+                    <?php echo $this->numberFormat(
+                        floatval($entity->getValorInicial()),
+                        NumberFormatter::DECIMAL,
+                        NumberFormatter::TYPE_DEFAULT,
+                        "pt_BR"
+                    ); ?>
+                </td>
+                <td class="text-right">
+                    <?php echo $this->numberFormat(
+                        floatval($entity->getValorFinal()),
+                        NumberFormatter::DECIMAL,
+                        NumberFormatter::TYPE_DEFAULT,
+                        "pt_BR"
+                    ); ?>
+                </td>
                 <td class="text-center">
                     <i class="<?php echo $entity->getTipo()->getIcon(); ?>" aria-hidden="true"></i>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-success" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'editar', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-pencil"></i> </a>
-                    <a class="btn btn-sm btn-danger" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'excluir', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-remove-sign"></i> </a>
+                    <a class="btn btn-xs btn-success" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'editar', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-pencil"></i> </a>
+                    <a class="btn btn-xs btn-danger" href="<?php echo $this->url('lancamentos/default', array('controller' => 'lancamentos', 'action' => 'excluir', 'id' => $entity->getId())); ?>"><i class="glyphicon glyphicon-remove-sign"></i> </a>
                 </td>
             </tr>
             <?php endforeach; ?>

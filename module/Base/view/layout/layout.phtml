@@ -80,6 +80,13 @@ $strPageNamespace = $this->viewModel()->getCurrent()->getChildren()[0]->getTempl
                     </a>
                 </li>
                 <!-- end li::tipo -->
+                <!-- init li::prioridade -->
+                <li class="<?php if ($strPageNamespace == 'prioridade/index/index') {echo('active');} ?>">
+                    <a href="<?php echo $this->url('prioridade', array('action' => 'default')); ?>">
+                        Prioridade
+                    </a>
+                </li>
+                <!-- end li::prioridade -->
                 <!-- init li::lancamentos -->
                 <li class="<?php if ($strPageNamespace == 'lancamentos/index/index') {echo('active');} ?>">
                     <a href="<?php echo $this->url('lancamentos', array('action' => 'default')); ?>">
