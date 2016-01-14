@@ -34,10 +34,12 @@ class IndexController extends AbstractActionController
         if ($objRequest->isPost()) {
             $form->setData($objRequest->getPost());
             if ($form->isValid()) {
-                $arrData = $form->getData();
+                $arrDataFromForm = $form->getData();
 
                 try {
-                    $service->criarController($arrData);
+                    $service->criarController($arrDataFromForm);
+                    //return $this->redirect()
+                    //    ->toRoute($this->route, array('controller' => 'gerador', 'action' => 'criarController'));
                 } catch (\Exception $objException) {
                     $this->flashMessenger()->addErrorMessage($objException->getMessage());
                 }

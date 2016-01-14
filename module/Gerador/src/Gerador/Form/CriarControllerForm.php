@@ -22,52 +22,67 @@ class CriarControllerForm extends Form
         $this->setAttribute('method', 'POST');
         $this->setInputFilter(new CriarControllerFilter());
 
-        //Input strForm
-        $strForm = new Text('strForm');
-        $strForm->setLabel('strForm')
+        //Input strModuleName
+        $strModuleName = new Text('strModuleName');
+        $strModuleName->setLabel('strModuleName')
             ->setAttributes(array(
-                'maxlength' => 100
+                'maxlength' => 100,
+                'class' => 'form-control'
             ));
-        $this->add($strForm);
+        $this->add($strModuleName);
 
-        //Input strController
-        $strController = new Text('strController');
-        $strController->setLabel('strController')
+        //Input strFormName
+        $strFormName = new Text('strFormName');
+        $strFormName->setLabel('strFormName')
             ->setAttributes(array(
-                'maxlength' => 100
+                'maxlength' => 100,
+                'class' => 'form-control'
             ));
-        $this->add($strController);
+        $this->add($strFormName);
 
-        //Input strRoute
-        $strRoute = new Text('strRoute');
-        $strRoute->setLabel('strRoute')
+        //Input strControllerName
+        $strControllerName = new Text('strControllerName');
+        $strControllerName->setLabel('strControllerName')
             ->setAttributes(array(
-                'maxlength' => 100
+                'maxlength' => 100,
+                'class' => 'form-control'
             ));
-        $this->add($strRoute);
+        $this->add($strControllerName);
 
-        //Input strService
-        $strService = new Text('strService');
-        $strService->setLabel('strService')
+        //Input strRouteName
+        $strRouteName = new Text('strRouteName');
+        $strRouteName->setLabel('strRouteName')
             ->setAttributes(array(
-                'maxlength' => 100
+                'maxlength' => 100,
+                'class' => 'form-control'
             ));
-        $this->add($strService);
+        $this->add($strRouteName);
 
-        //Input strEntity
-        $strEntity = new Text('strEntity');
-        $strEntity->setLabel('strEntity')
+        //Input strServiceName
+        $strServiceName = new Text('strServiceName');
+        $strServiceName->setLabel('strServiceName')
             ->setAttributes(array(
-                'maxlength' => 100
+                'maxlength' => 100,
+                'class' => 'form-control'
             ));
-        $this->add($strEntity);
+        $this->add($strServiceName);
+
+        //Input strEntityName
+        $strEntityName = new Text('strEntityName');
+        $strEntityName->setLabel('strEntityName')
+            ->setAttributes(array(
+                'maxlength' => 100,
+                'class' => 'form-control'
+            ));
+        $this->add($strEntityName);
 
         //Botao submit
         $button = new Button('submit');
         $button->setLabel('Salvar')
             ->setAttributes(array(
                 'type' => 'submit',
-                'class' => 'btn'
+                'class' => 'btn btn-success',
+                'value' => 'Criar'
             ));
         $this->add($button);
     }

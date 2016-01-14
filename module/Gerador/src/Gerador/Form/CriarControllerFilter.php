@@ -18,49 +18,58 @@ class CriarControllerFilter extends InputFilter
      */
     public function __construct()
     {
-        # filter for strForm
-        $strForm = new Input('strForm');
-        $strForm->setRequired(true)
+        # filter for strModuleName
+        $strModuleName = new Input('strModuleName');
+        $strModuleName->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
-        $strForm->getValidatorChain()->attach(new NotEmpty());
-        $this->add($strForm);
+        $strModuleName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strModuleName);
 
-        # filter for strController
-        $strController = new Input('strController');
-        $strController->setRequired(true)
+        # filter for strFormName
+        $strFormName = new Input('strFormName');
+        $strFormName->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
-        $strController->getValidatorChain()->attach(new NotEmpty());
-        $this->add($strController);
+        $strFormName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strFormName);
 
-        # filter for strRoute
-        $strRoute = new Input('strRoute');
-        $strRoute->setRequired(true)
+        # filter for strControllerName
+        $strControllerName = new Input('strControllerName');
+        $strControllerName->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
-        $strRoute->getValidatorChain()->attach(new NotEmpty());
-        $this->add($strRoute);
+        $strControllerName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strControllerName);
 
-        # filter for strService
-        $strService = new Input('strService');
-        $strService->setRequired(true)
+        # filter for strRouteName
+        $strRouteName = new Input('strRouteName');
+        $strRouteName->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
-        $strService->getValidatorChain()->attach(new NotEmpty());
-        $this->add($strService);
+        $strRouteName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strRouteName);
 
-        # filter for strEntity
-        $strEntity = new Input('strEntity');
-        $strEntity->setRequired(true)
+        # filter for strServiceName
+        $strServiceName = new Input('strServiceName');
+        $strServiceName->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
-        $strEntity->getValidatorChain()->attach(new NotEmpty());
-        $this->add($strEntity);
+        $strServiceName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strServiceName);
+
+        # filter for strEntityName
+        $strEntityName = new Input('strEntityName');
+        $strEntityName->setRequired(true)
+            ->getFilterChain()
+            ->attach(new StringTrim())
+            ->attach(new StripTags());
+        $strEntityName->getValidatorChain()->attach(new NotEmpty());
+        $this->add($strEntityName);
     }
 }

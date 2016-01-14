@@ -12,7 +12,8 @@ return array(
         'Lancamentos',
         'Tipo',
         'Prioridade',
-        'Gerador'
+        'Gerador',
+        'Codegenerator'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
