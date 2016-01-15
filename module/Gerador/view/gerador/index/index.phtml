@@ -11,6 +11,17 @@
             );
             ?>">Controller Generator</a>
         </li>
+        <li>
+            <a href="<?php
+            echo $this->url(
+                'gerador/default',
+                array(
+                    'controller' => 'gerador',
+                    'action' => 'criarForm'
+                )
+            );
+            ?>">Form Generator</a>
+        </li>
     </ul>
 </div>
 
@@ -30,6 +41,15 @@
                     array('controller' => 'gerador', 'action' => 'criarController')
                 ); ?>">
                 Controller Generator
+            </a>
+        </li>
+        <li>
+            <a
+                href="<?php echo $this->url(
+                    'gerador/default',
+                    array('controller' => 'gerador', 'action' => 'criarForm')
+                ); ?>">
+                Form Generator
             </a>
         </li>
     </ul>

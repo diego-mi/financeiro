@@ -7,30 +7,40 @@ use Zend\Form\Form;
 
 use Categoria\Form\CategoriaFilter;
 
+/**
+ * Class CategoriaForm
+ * @package Categoria\Form
+ */
 class CategoriaForm extends Form
 {
+    /**
+     * CategoriaForm constructor.
+     */
     public function __construct()
     {
         parent::__construct(null);
         $this->setAttribute('method', 'POST');
         $this->setInputFilter(new CategoriaFilter());
 
-        //Input name
-        $name = new Text('name');
-        $name->setLabel('Nome')
-            ->setAttributes(array(
-                    'maxlength' => 45
-                ));
-        $this->add($name);
+        $this->add([
+            'name' => 'name',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Nome',
+            ],
+            'attributes' => [
+                'class' => 'form-control',
+            ],
+        ]);
 
-        //Botao submit
-        $button = new Button('submit');
-        $button->setLabel('Salvar')
-            ->setAttributes(array(
-                    'type' => 'submit',
-                    'class' => 'btn'
-                ));
-        $this->add($button);
+        $this->add([
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => [
+                'class' => 'btn btn-success',
+                'value' => 'Salvar'
+            ],
+        ]);
     }
 
 }

@@ -8,10 +8,14 @@
       <library name="PHARS">
         <CLASSES>
           <root url="phar://$MODULE_DIR$/module/Operacoes/test/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/financeiro/module/Operacoes/test/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/financeiro/module/Categoria/test/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/module/Categoria/test/phpunit.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/module/Operacoes/test/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/financeiro/module/Operacoes/test/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/financeiro/module/Categoria/test/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/module/Categoria/test/phpunit.phar/" />
         </SOURCES>
       </library>

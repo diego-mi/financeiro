@@ -13,6 +13,7 @@ class DirHelper
     const STR_CONTROLLER_PATH = 'Controller';
     const STR_SERVICE_PATH = 'Service';
     const STR_FORM_PATH = 'Form';
+    const STR_FILTER_PATH = 'Filter';
     const STR_ENTITY_PATH = 'Entity';
 
     /**
@@ -35,6 +36,13 @@ class DirHelper
      * @var string
      */
     protected $strFormName = "";
+
+    /**
+     * Name for new Filter
+     *
+     * @var string
+     */
+    protected $strFilterName = "";
 
     /**
      * Name for new Service
@@ -69,6 +77,16 @@ class DirHelper
     }
 
     /**
+     * Method for set params
+     * @param array $arrValuesForSet
+     */
+    public function initParams(Array $arrValuesForSet = array())
+    {
+        $hydrator = new ClassMethods();
+        $hydrator->hydrate($arrValuesForSet, $this);
+    }
+
+    /**
      * @return string
      */
     public function getStrModuleName()
@@ -81,7 +99,7 @@ class DirHelper
      */
     public function setStrModuleName($strModuleName)
     {
-        $this->strModuleName = $strModuleName;
+        $this->strModuleName = ucfirst($strModuleName);
     }
 
     /**
@@ -97,7 +115,7 @@ class DirHelper
      */
     public function setStrControllerName($strControllerName)
     {
-        $this->strControllerName = $strControllerName;
+        $this->strControllerName = ucfirst($strControllerName);
     }
 
     /**
@@ -113,7 +131,23 @@ class DirHelper
      */
     public function setStrFormName($strFormName)
     {
-        $this->strFormName = $strFormName;
+        $this->strFormName = ucfirst($strFormName);
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrFilterName()
+    {
+        return $this->strFilterName;
+    }
+
+    /**
+     * @param string $strFilterName
+     */
+    public function setStrFilterName($strFilterName)
+    {
+        $this->strFilterName = ucfirst($strFilterName);
     }
 
     /**
@@ -129,7 +163,7 @@ class DirHelper
      */
     public function setStrServiceName($strServiceName)
     {
-        $this->strServiceName = $strServiceName;
+        $this->strServiceName = ucfirst($strServiceName);
     }
 
     /**
@@ -145,7 +179,7 @@ class DirHelper
      */
     public function setStrEntityName($strEntityName)
     {
-        $this->strEntityName = $strEntityName;
+        $this->strEntityName = ucfirst($strEntityName);
     }
 
     /**
@@ -194,6 +228,17 @@ class DirHelper
      * @return string
      */
     public function getStrDirPathForm()
+    {
+        return $this->getStrDirPathModule() . '/src/' . self::STR_FORM_PATH;
+    }
+
+    /**
+     * Get Filter diretory
+     *
+     * @exemple 'module/Newmodule/src/Filter
+     * @return string
+     */
+    public function getStrDirPathFilter()
     {
         return $this->getStrDirPathModule() . '/src/' . self::STR_FORM_PATH;
     }
@@ -249,6 +294,17 @@ class DirHelper
      * @return string
      */
     public function getStrFormNamespace()
+    {
+        return $this->getStrModuleNamespace() . '\\' . self::STR_FORM_PATH;
+    }
+
+    /**
+     * Get Filter namespace
+     *
+     * @exemple 'Module/Filter'
+     * @return string
+     */
+    public function getStrFilterNamespace()
     {
         return $this->getStrModuleNamespace() . '\\' . self::STR_FORM_PATH;
     }

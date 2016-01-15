@@ -17,7 +17,27 @@
 
     echo $this->form()->openTag($form);
 
-    echo $this->formCollection($form);
+?>
+<div class="col-lg-12">
+    <?php
+
+    foreach ($form as $element) { ?>
+        <div class="form-group">
+            <?php
+            if ($element->getAttribute('type') != 'submit') {
+                echo ('<label for="' . $element->getAttribute('id') .'">'. $element->getLabel() . '</label>');
+                echo($this->formElement($element));
+            } else {
+                echo($this->formInput($element));
+            }
+            echo($this->formElementErrors($element));
+            ?>
+        </div>
+        <?php
+    }
+    ?>
+</div>
+<?php
 
     echo $this->form()->closeTag();
 ?>

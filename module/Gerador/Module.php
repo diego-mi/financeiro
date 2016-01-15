@@ -1,6 +1,8 @@
 <?php
 namespace Gerador;
 
+use Gerador\Form\CriarFormForm;
+use Gerador\Form\CriarFilterForm;
 use Gerador\Service\GeradorFormService;
 use Gerador\Service\GeradorService;
 use Gerador\Form\CriarControllerForm;
@@ -55,11 +57,14 @@ class Module
                 'Gerador\Service\GeradorService' => function ($em) {
                     return new GeradorService($em->get('Doctrine\ORM\EntityManager'));
                 },
-                'Gerador\Service\GeradorFormService' => function ($em) {
-                    return new GeradorFormService($em->get('Doctrine\ORM\EntityManager'));
+                'Gerador\Form\CriarControllerForm' => function () {
+                    return new CriarControllerForm();
                 },
-                'Gerador\Form\CriarControllerForm' => function ($em) {
-                    return new CriarControllerForm($em->get('Doctrine\ORM\EntityManager'));
+                'Gerador\Form\CriarFormForm' => function () {
+                    return new CriarFormForm();
+                },
+                'Gerador\Form\CriarFilterForm' => function () {
+                    return new CriarFilterForm();
                 }
             )
         );

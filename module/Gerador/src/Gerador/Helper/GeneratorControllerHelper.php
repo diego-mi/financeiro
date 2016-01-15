@@ -1,24 +1,13 @@
 <?php
-namespace Gerador\Service;
-
-use Gerador\Helper\DirHelper;
-use Gerador\Helper\MaskHelper;
+namespace Gerador\Helper;
 
 /**
  * Class GeradorService
  * @package Gerador\Service
  */
-class CriarControllerService
+class GeneratorControllerHelper
 {
     protected $strTemplateControllerDir = 'module/Gerador/Template/src/Controller/';
-
-    /**
-     * AbstractService constructor.
-     */
-    public function __construct()
-    {
-
-    }
 
     /**
      * Index - Lista Resultados

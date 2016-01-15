@@ -2,7 +2,9 @@
 namespace Gerador\Service;
 
 use Doctrine\ORM\EntityManager;
-use Gerador\Service\GerenciarDiretorioService;
+use Gerador\Helper\GeneratorControllerHelper;
+use Gerador\Helper\GeneratorFilterHelper;
+use Gerador\Helper\GeneratorFormHelper;
 
 /**
  * Class GeradorService
@@ -10,26 +12,35 @@ use Gerador\Service\GerenciarDiretorioService;
  */
 class GeradorService
 {
+    protected $em;
     protected $gerenciarDiretorio;
+    protected $generatorControllerHelper;
+    protected $generatorFormHelper;
 
     /**
      * AbstractService constructor.
+     * @param EntityManager $em
      */
-    public function __construct()
+    public function __construct(EntityManager $em)
     {
+        $this->em = $em;
         $this->gerenciarDiretorioService = new GerenciarDiretorioService();
-        $this->criarControllerService = new CriarControllerService();
+        $this->generatorControllerHelper = new GeneratorControllerHelper();
+        $this->generatorFormHelper = new GeneratorFormHelper($em);
+        $this->generatorFilterHelper = new GeneratorFilterHelper($em);
     }
 
     /**
+     * Metodo responsavel por criar um controller
+     *
      * @param array $arrInfosController
      * @return bool
      */
-    public function criarController(Array $arrInfosController = array())
+    public function createController(Array $arrInfosController = array())
     {
         if ($this->isValidName($arrInfosController['strModuleName'])) {
             if ($this->gerenciarDiretorioService->createAllDir($arrInfosController)) {
-                return $this->criarControllerService->createController($arrInfosController);
+                return $this->generatorControllerHelper->createController($arrInfosController);
             }
         }
 
@@ -37,6 +48,8 @@ class GeradorService
     }
 
     /**
+     *
+     *
      * @param string $strName
      * @return bool
      * @throws \Exception
@@ -49,5 +62,59 @@ class GeradorService
         }
 
         return true;
+    }
+
+    /**
+     * Metodo responsavel por criar um form
+     *
+     * @param array $arrInfosForm
+     * @return bool
+     */
+    public function createForm(Array $arrInfosForm = array())
+    {
+        if ($this->isValidName($arrInfosForm['strTableName'])) {
+            if ($this->gerenciarDiretorioService->createAllDir($arrInfosForm)) {
+                $this->generatorFormHelper->createNewForm($arrInfosForm);
+            }
+        }
+
+        return false;
+    }
+
+
+//    /**
+//     * @param array $arrInfosForm
+//     * @return bool
+//     */
+//    public function createAllForms(Array $arrInfosForm = array())
+//    {
+//        $arrTables = $this->em->getConnection()->getSchemaManager()->createSchema()->getTables();
+//
+//        foreach ($arrTables as $objTable) {
+//            $arrInfosForm['strTableName'] = $objTable->getName();
+//            $arrInfosForm['strFormName'] = ucfirst($objTable->getName()) . 'Form';
+//            $arrInfosForm['strFilterName'] = ucfirst($objTable->getName()) . 'Filter';
+//            $this->createForm($arrInfosForm);
+//        }
+//
+//        return false;
+//    }
+
+
+    /**
+     * Metodo responsavel por criar um filter para um form
+     *
+     * @param array $arrInfosForm
+     * @return bool
+     */
+    public function createFilter(Array $arrInfosForm = array())
+    {
+        if ($this->isValidName($arrInfosForm['strTableName'])) {
+            if ($this->gerenciarDiretorioService->createAllDir($arrInfosForm)) {
+                $this->generatorFilterHelper->createNewFilter($arrInfosForm);
+            }
+        }
+
+        return false;
     }
 }

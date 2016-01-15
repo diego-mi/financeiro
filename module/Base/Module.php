@@ -48,18 +48,4 @@ class Module
             ),
         );
     }
-
-    /**
-     * @return array
-     */
-    public function getServiceConfig()
-    {
-        return array(
-            'factories' => array(
-                'Categoria\Service\CategoriaService' => function ($em) {
-                    return new CategoriaService($em->get('Doctrine\ORM\EntityManager'));
-                }
-            )
-        );
-    }
 }
