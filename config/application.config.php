@@ -13,7 +13,8 @@ return array(
         'Tipo',
         'Prioridade',
         'Gerador',
-        'Codegenerator'
+        'Codegenerator',
+        'Sake\CodeGenerator'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

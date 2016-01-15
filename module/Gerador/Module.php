@@ -1,6 +1,7 @@
 <?php
 namespace Gerador;
 
+use Gerador\Service\GeradorFormService;
 use Gerador\Service\GeradorService;
 use Gerador\Form\CriarControllerForm;
 use Zend\Mvc\ModuleRouteListener;
@@ -53,6 +54,9 @@ class Module
             'factories' => array(
                 'Gerador\Service\GeradorService' => function ($em) {
                     return new GeradorService($em->get('Doctrine\ORM\EntityManager'));
+                },
+                'Gerador\Service\GeradorFormService' => function ($em) {
+                    return new GeradorFormService($em->get('Doctrine\ORM\EntityManager'));
                 },
                 'Gerador\Form\CriarControllerForm' => function ($em) {
                     return new CriarControllerForm($em->get('Doctrine\ORM\EntityManager'));

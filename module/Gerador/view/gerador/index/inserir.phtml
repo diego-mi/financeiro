@@ -11,7 +11,7 @@
         ->setMessageCloseString ('</div>')
         ->render ($form);
 
-    $form->setAttribute('action', $this->url('gerador/default', array('controller' => 'gerador', 'action' => 'inserir')));
+    $form->setAttribute('action', $this->url('gerador', array('controller' => 'index', 'action' => 'inserir')));
 
     $form->prepare();
 

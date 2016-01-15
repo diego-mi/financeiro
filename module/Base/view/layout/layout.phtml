@@ -107,9 +107,9 @@ $strPageNamespace = $this->viewModel()->getCurrent()->getChildren()[0]->getTempl
                 <li class="dropdown" class="<?php if ($strPageNamespace == 'gerador/index/index') {echo('active');} ?>">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gerador <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<?php echo $this->url('gerador', array('action' => 'default')); ?>">Index</a></li>
+                        <li><a href="<?php echo $this->url('gerador', array('controller' => 'ctrl', 'action' => 'index')); ?>">Index</a></li>
                         <li>
-                            <a href="<?php echo $this->url('gerador/default', array('controller' => 'gerador', 'action' => 'criarController')); ?>">Criar Controller</a>
+                            <a href="<?php echo $this->url('gerador', array('controller' => 'ctrl', 'action' => 'criarController')); ?>">Criar Controller</a>
                         </li>
                     </ul>
                 </li>
