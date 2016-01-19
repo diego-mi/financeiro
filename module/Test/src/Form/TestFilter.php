@@ -60,7 +60,8 @@ class TestFilter extends InputFilter
             ->setRequired(1)
             ->getFilterChain()
             ->attach(new StringTrim())
-            ->attach(new StripTags())
+            ->attach(new StripTags());
+        $filterValorInicial->getValidatorChain()
             ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))
             ->attach(new StringLength([
                 "max" => 10,
@@ -72,10 +73,12 @@ class TestFilter extends InputFilter
          * Type Float
          */
         $filterValorFinal = new Input("valorFinal");
-        $filterValorFinal->setRequired(1)
+        $filterValorFinal
+            ->setRequired(1)
             ->getFilterChain()
             ->attach(new StringTrim())
-            ->attach(new StripTags())
+            ->attach(new StripTags());
+        $filterValorFinal->getValidatorChain()
             ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))
             ->attach(new StringLength([
                 "max" => 10,

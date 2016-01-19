@@ -4,6 +4,7 @@ namespace Gerador\Helper\Filter;
 
 use Gerador\Common\Nomenclatura;
 use Doctrine\DBAL\Schema\Column;
+use Zend\Validator\InArray;
 
 /**
  * Class GeneratorFilterInputTypeFloat
@@ -14,7 +15,7 @@ class GeneratorFilterInputTypeFloat
     use Nomenclatura;
 
     private $objColumn;
-    private $objForeignKey;
+    private $arrForeignKeys;
 
     /**
      * GeneratorFilterInputTypeFloat constructor.
@@ -24,7 +25,7 @@ class GeneratorFilterInputTypeFloat
     public function __construct(Column $objColumn, $arrForeignKeys)
     {
         $this->objColumn = $objColumn;
-        $this->objForeignKey = $arrForeignKeys[$this->objColumn->getName()];
+        $this->arrForeignKeys = $arrForeignKeys[$this->objColumn->getName()];
 
     }
 
@@ -40,8 +41,9 @@ class GeneratorFilterInputTypeFloat
 
         $strCreateInput = $this->getComment();
         $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getInicializacaoInputFilter();
-        $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getStrRequired();
-        $strCreateInput .= $this->getValidators() . PHP_EOL;
+        $strCreateInput .= $strDeclaracaoDoInputFilter . PHP_EOL . $this->getStrRequired() . PHP_EOL;
+        $strCreateInput .= $this->getFilters() . PHP_EOL;
+        $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getValidators() . PHP_EOL;
 
         return $strCreateInput;
     }
@@ -86,20 +88,21 @@ class GeneratorFilterInputTypeFloat
     /**
      * Metodo responsavel por criar a string de validators
      */
-    private function getValidators()
+    private function getFilters()
     {
-        return '->getFilterChain()' . PHP_EOL .
-            $this->getValidatorsDefault() .
-            $this->getValidatorsType() .
-            $this->getValidatorStringLength() . ';' . PHP_EOL;
+        return '->getFilterChain()' . PHP_EOL . '->attach(new StringTrim())' . PHP_EOL . '->attach(new StripTags());';
     }
 
     /**
-     * Metodo responsavel por adicionar validators padroes. StringTrim e StripTags
+     * Metodo responsavel por criar os Validators
+     *
+     * @return string
      */
-    private function getValidatorsDefault()
+    private function getValidators()
     {
-        return '->attach(new StringTrim())' . PHP_EOL . '->attach(new StripTags())';
+        return '->getValidatorChain()' . PHP_EOL . $this->getValidatorsType() .
+            $this->getValidatorStringLength() .
+            $this->getValidatorInArray() . ';' . PHP_EOL;
     }
 
     /**
@@ -107,7 +110,7 @@ class GeneratorFilterInputTypeFloat
      */
     private function getValidatorsType()
     {
-        return PHP_EOL . '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))';
+        return '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))' . PHP_EOL;
     }
 
 
@@ -123,9 +126,23 @@ class GeneratorFilterInputTypeFloat
             $strValidatorStringLength = PHP_EOL . '->attach(new StringLength([' . PHP_EOL .
                 '"max" => '. $intMaxLength .',' . PHP_EOL .
                 '"message" => "Atingiu o limite de caracteres"' . PHP_EOL .
-                ']))';
+                ']))' . PHP_EOL;
         }
 
         return $strValidatorStringLength;
+    }
+
+    /**
+     * Metodo para criar o validator InArray para chaves estrangeiras
+     * @return string
+     */
+    private function getValidatorInArray()
+    {
+        $strValidatorInArray = '';
+        if ($this->arrForeignKeys) {
+            $strValidatorInArray = '->attach(new \Zend\Validator\InArray(["haystack" => $' .
+                $this->objColumn->getName() .']))';
+        }
+        return $strValidatorInArray;
     }
 }
