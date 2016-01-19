@@ -1,13 +1,13 @@
 <?php
 namespace Lancamentos\Form;
 
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\InputFilter\Input;
+use Base\Form\BaseInputFilter;
 use Zend\InputFilter\InputFilter;
-use Zend\Validator\InArray;
-use Zend\Validator\NotEmpty;
 
+/**
+ * Class LancamentosFilter
+ * @package Lancamentos\Form
+ */
 class LancamentosFilter extends InputFilter
 {
     protected $categoria;
@@ -16,6 +16,14 @@ class LancamentosFilter extends InputFilter
     protected $tipo;
     protected $prioridade;
 
+    /**
+     * LancamentosFilter constructor.
+     * @param array $categoria
+     * @param array $operacao
+     * @param array $origem
+     * @param array $tipo
+     * @param array $prioridade
+     */
     public function __construct(
         Array $categoria = array(),
         Array $operacao = array(),
@@ -23,91 +31,18 @@ class LancamentosFilter extends InputFilter
         Array $tipo = array(),
         Array $prioridade = array()
     ) {
-        $this->categoria = $categoria;
-        $this->operacao = $operacao;
-        $this->origem = $origem;
-        $this->tipo = $tipo;
-        $this->prioridade = $prioridade;
+        $this->add(new BaseInputFilter('categoria', $categoria));
 
-        $arrCategoria = new InArray();
-        $arrCategoria->setOptions(array('haystack' => $this->haystack($this->categoria)));
+        $this->add(new BaseInputFilter('operacao', $operacao));
 
-        $categoria = new Input('categoria');
-        $categoria->setRequired(true)
-            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
-        $categoria->getValidatorChain()->attach($arrCategoria);
-        $this->add($categoria);
+        $this->add(new BaseInputFilter('origem', $origem));
 
-        $arrOperacoes = new InArray();
-        $arrOperacoes->setOptions(array('haystack' => $this->haystack($this->operacao)));
+        $this->add(new BaseInputFilter('valorInicial'));
 
-        $operacao = new Input('operacao');
-        $operacao->setRequired(true)
-            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
-        $operacao->getValidatorChain()->attach($arrOperacoes);
-        $this->add($operacao);
+        $this->add(new BaseInputFilter('valorFinal'));
 
-        $arrOrigem = new InArray();
-        $arrOrigem->setOptions(array('haystack' => $this->haystack($this->origem)));
+        $this->add(new BaseInputFilter('tipo', $tipo));
 
-        $origem = new Input('origem');
-        $origem->setRequired(true)
-            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
-        $origem->getValidatorChain()->attach($arrOrigem);
-        $this->add($origem);
-
-        $valorInicial = new Input('valorInicial');
-        $valorInicial->setRequired(true)
-            ->getFilterChain()
-            ->attach(new StringTrim())
-            ->attach(new StripTags());
-        $valorInicial->getValidatorChain()->attach(new NotEmpty());
-        $this->add($valorInicial);
-
-        $valorFinal = new Input('valorFinal');
-        $valorFinal->setRequired(true)
-            ->getFilterChain()
-            ->attach(new StringTrim())
-            ->attach(new StripTags());
-        $valorFinal->getValidatorChain()->attach(new NotEmpty());
-        $this->add($valorFinal);
-
-
-        $arrTipo = new InArray();
-        $arrTipo->setOptions(array('haystack' => $this->haystack($this->tipo)));
-
-        $tipo = new Input('tipo');
-        $tipo->setRequired(true)
-            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
-        $tipo->getValidatorChain()->attach($arrTipo);
-        $this->add($tipo);
-
-        $arrPrioridade = new InArray();
-        $arrPrioridade->setOptions(array('haystack' => $this->haystack($this->prioridade)));
-
-        $prioridade = new Input('prioridade');
-        $prioridade->setRequired(true)
-            ->getFilterChain()->attach(new StripTags())->attach(new StringTrim());
-        $prioridade->getValidatorChain()->attach($arrPrioridade);
-        $this->add($prioridade);
+        $this->add(new BaseInputFilter('prioridade', $prioridade));
     }
-
-    /**
-     * @param array $haystack
-     *
-     * @return array
-     */
-    public function haystack(Array $haystack = array())
-    {
-        $array = array();
-        foreach ($haystack as $value) {
-            if ($value) {
-                $array[$value['value']] = $value['label'];
-            }
-        }
-
-
-        return array_keys($array);
-    }
-
 }

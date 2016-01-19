@@ -2,6 +2,13 @@
 namespace Gerador\Helper;
 
 use Doctrine\DBAL\Schema\Column;
+use Gerador\Common\Nomenclatura;
+
+use Doctrine\DBAL\Types\IntegerType;
+use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\FloatType;
+use Gerador\Helper\Filter\GeneratorFilterInputTypeFloat;
 
 /**
  * Class GeneratorInputFilterHelper
@@ -10,101 +17,106 @@ use Doctrine\DBAL\Schema\Column;
 class GeneratorInputFilterHelper
 {
 
+    use Nomenclatura;
+
     /**
      * Method for create a input for new form
      *
      * @param \Doctrine\DBAL\Schema\Column $objColumn
+     * @param array $arrForeignKeys Foreign keys
      * @return string
      */
-    public function createInput(Column $objColumn)
+    public function createInput(Column $objColumn, $arrForeignKeys)
     {
+        if ($objColumn->getType() instanceof FloatType) {
+            $objInputFilter = new GeneratorFilterInputTypeFloat($objColumn, $arrForeignKeys);
+            return $objInputFilter->getStrCreateInputFilter();
+        }
+
         return
-            '$this->add([' . PHP_EOL .
-                "'name' => 'name'," . PHP_EOL .
-                "'required' => true," . PHP_EOL .
-                "'filters' => [" . PHP_EOL .
-                    "['name' => 'StripTags']," . PHP_EOL .
-                    "['name' => 'StringTrim']," . PHP_EOL .
-                "]," . PHP_EOL .
-                "'validators' => [" . PHP_EOL .
-                    "[" . PHP_EOL .
-                        "'name' => 'StringLength'," . PHP_EOL .
-                        "'options' => [" . PHP_EOL .
-                            "'encoding' => 'UTF-8'," . PHP_EOL .
-                            "'min' => 1," . PHP_EOL .
-                            "'max' => 50," . PHP_EOL .
-                        "]," . PHP_EOL .
-                    "]," . PHP_EOL .
-                "]," . PHP_EOL .
-            "]);" . PHP_EOL . PHP_EOL;
+            '$filter' . $this->underscoreToCamelcase($objColumn->getName()) . ' = new BaseInputFilter(' .
+            '"' . $this->underscoreToLowerCamelcase($objColumn->getName()) . '", ' .
+            $this->getParamsToHaystack($arrForeignKeys[$objColumn->getName()]) . ', '.
+            (boolean) $objColumn->getNotnull() . ', true' .
+            $this->getStrMinAndMaxlength($objColumn, $arrForeignKeys) . ');' . PHP_EOL .
+            '$this->add($filter' . $this->underscoreToCamelcase($objColumn->getName()) . ');' . PHP_EOL . PHP_EOL;
     }
 
     /**
+     * Metodo responsavel por setar o parametro para o haystack
+     * @param array $arrParamToHaystack
+     * @return string
+     */
+    private function getParamsToHaystack($arrParamToHaystack = array())
+    {
+        $strHaystack = '[]';
+        if (count($arrParamToHaystack)) {
+            $strHaystack = '$' . $arrParamToHaystack["strColumns"];
+        }
+        return $strHaystack;
+    }
+
+    /**
+     * Metodo para criar a string para min e max length
+     *
      * @param $objColumn
      * @return string
      */
-    private function checkInputMaxlength($objColumn)
+    private function getStrMinAndMaxlength($objColumn, $arrForeignKeys)
     {
-        $strInputMaxLength = '';
-        $intLength = $objColumn->getLength();
-
-        if (!is_null($intLength)) {
-            $strInputMaxLength = "'maxlength' => '$intLength'," . PHP_EOL;
+        if ($arrForeignKeys[$objColumn->getName()]) {
+            return '';
         }
 
-        return $strInputMaxLength;
+        $strMinAndMaxLength = '';
+        $intMaxLength = $this->getMaxlength($objColumn);
+
+        if (($objColumn->getNotnull() && ($intMaxLength))) {
+            $strMinAndMaxLength = ', ' . $this->getMinlength($objColumn) . ', ' . $this->getMaxlength($objColumn);
+        }
+
+        return $strMinAndMaxLength;
+
     }
 
     /**
-     * @return string
-     */
-    public function createInputBtnSubmit()
-    {
-        return
-            '$this->add([' . PHP_EOL .
-            "'name' => 'submit'," . PHP_EOL .
-            "'type' => 'Submit'," . PHP_EOL .
-            "'attributes' => [" . PHP_EOL .
-            "'class' => 'btn btn-success'," . PHP_EOL .
-            "'value' => 'Go'," . PHP_EOL .
-            "]," . PHP_EOL .
-            "]);" . PHP_EOL . PHP_EOL;
-    }
-
-
-    /**
-     * Metodo responsavel por realizar a conversao de uma string com nomenclatura em underscore para
-     * Camelcase e substituir '_' por espacos
+     * Metodo responsavel por recuperar o maxlength
      *
-     * @param $str
-     * @return string
+     * @param Column $objColumn
+     * @return int|null
      */
-    public function underscoreToSpaceCamelcase($str)
+    private function getMaxlength($objColumn)
     {
-        return ucwords(str_replace('_', ' ', strtolower($str)));
+        $intMaxLength = 0;
+        $objType = $objColumn->getType();
+
+        if ($objType instanceof IntegerType) {
+            $intMaxLength = $objColumn->getPrecision();
+        } elseif ($objType instanceof StringType) {
+            $intMaxLength = $objColumn->getLength();
+        } elseif ($objType instanceof DateTimeType) {
+            $intMaxLength = 0;
+        } elseif ($objType instanceof FloatType) {
+            $intMaxLength = $objColumn->getPrecision();
+        }
+
+        return $intMaxLength;
     }
 
     /**
-     * Metodo responsavel por realizar a conversao de uma string com nomenclatura em underscore
-     * para Camelcase ou lowerCamelcase
+     * Metodo responsavel por recuperar o maxlength
      *
-     * @param $str
-     * @return string
+     * @param Column $objColumn
+     * @return int|null
      */
-    public function underscoreToCamelcase($str)
+    private function getMinlength($objColumn)
     {
-        return str_replace(' ', '', $this->underscoreToSpaceCamelcase($str));
-    }
+        $intMinLength = 0;
 
-    /**
-     * Metodo responsavel por realizar a conversao de uma string com nomenclatura em underscore para
-     * lowerCamelcase
-     *
-     * @param $str
-     * @return string
-     */
-    public function underscoreToLowerCamelcase($str)
-    {
-        return lcfirst($this->underscoreToCamelcase($str));
+        if ($objColumn->getNotnull()) {
+            $intMinLength = 1;
+        }
+
+        return $intMinLength;
     }
 }

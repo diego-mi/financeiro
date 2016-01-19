@@ -19,6 +19,7 @@ class GeneratorFilterHelper
     private $dirHelper;
     private $newFilter;
     private $objTable;
+    private $arrForeignKeys;
 
     /**
      * GeneratorFilterHelper constructor.
@@ -61,6 +62,14 @@ class GeneratorFilterHelper
         $this->dirHelper = new DirHelper();
         $this->dirHelper->initParams($arrInfosFilter);
         $this->objTable = $this->schema->getTable($arrInfosFilter['strTableName']);
+        $arrForeignKeys = $this->objTable->getForeignKeys();
+        foreach ($arrForeignKeys as $arrForeignKey) {
+            $this->arrForeignKeys[$arrForeignKey->getColumns()[0]] = [
+                'strColumns' => $arrForeignKey->getColumns()[0],
+                'strForeignColumns' => $arrForeignKey->getForeignColumns()[0],
+                'strForeignTableName' => $arrForeignKey->getForeignTableName()
+            ];
+        }
     }
 
     /**
@@ -82,7 +91,12 @@ class GeneratorFilterHelper
      */
     private function addUseForNewFilter()
     {
-        $this->newFilter->addUse('Zend\InputFilter\InputFilter;');
+        $this->newFilter
+            ->addUse('Zend\InputFilter\InputFilter')
+            ->addUse('Zend\Filter\StringTrim')
+            ->addUse('Zend\Filter\StripTags')
+            ->addUse('Zend\InputFilter\Input')
+            ->addUse('Zend\Validator\StringLength');
     }
 
     /**
@@ -111,8 +125,21 @@ class GeneratorFilterHelper
      */
     public function getDocBlockMethodConstruct()
     {
+        $arrParameters = array_keys($this->arrForeignKeys);
+
+        $arrTags = [];
+
+        foreach ($arrParameters as $arrParameter) {
+            $arrTags[] = new Tag\ParamTag(
+                $arrParameter,
+                'array',
+                'Valores da tabela ' . $this->arrForeignKeys[$arrParameter]
+            );
+        }
+
         return DocBlockGenerator::fromArray(array(
-            'shortDescription' => 'CategoriaFilter constructor.'
+            'shortDescription' => 'CategoriaFilter constructor.',
+            'tags' => $arrTags
         ));
 
     }
@@ -125,7 +152,7 @@ class GeneratorFilterHelper
     {
         $this->newFilter->addMethods(
             [
-                $this->createMethodConstruct(),
+                $this->createMethodConstruct()
             ]
         );
     }
@@ -137,10 +164,13 @@ class GeneratorFilterHelper
      */
     private function createMethodConstruct()
     {
+        $arrParameters = array_keys($this->arrForeignKeys);
+
         return MethodGenerator::fromArray([
             'name' => '__construct',
+            'parameters' => $arrParameters,
             'body' => $this->getInputs(),
-            'docblock' => $this->getDocBlockMethodConstruct(),
+            'docblock' => $this->getDocBlockMethodConstruct()
         ]);
     }
 
@@ -157,10 +187,8 @@ class GeneratorFilterHelper
         $objColumns = $this->objTable->getColumns();
 
         foreach ($objColumns as $objColumn) {
-            $strInputs .= $generatorInputFilterHelper->createInput($objColumn);
+            $strInputs .= $generatorInputFilterHelper->createInput($objColumn, $this->arrForeignKeys);
         }
-
-        //$strInputs .= $generatorInputFilterHelper->createInputBtnSubmit();
 
         return $strInputs;
     }
