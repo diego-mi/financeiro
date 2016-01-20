@@ -17,16 +17,19 @@ class GeneratorFilterInputHelper
     use Nomenclatura;
 
     private $objColumn;
+    private $booIsPrimaryKey;
     private $arrForeignKeys;
 
     /**
      * GeneratorFilterInputTypeFloat constructor.
-     * @param $objColumn
-     * @param $arrForeignKeys
+     * @param Column $objColumn
+     * @param float $booIsPrimaryKey Valor informativo se a coluna eh chave primaria
+     * @param array $arrForeignKeys Array com informacoes, caso a coluna for chave estrangeira
      */
-    public function __construct(Column $objColumn, $arrForeignKeys)
+    public function __construct(Column $objColumn, $booIsPrimaryKey, $arrForeignKeys)
     {
         $this->objColumn = $objColumn;
+        $this->booIsPrimaryKey = $booIsPrimaryKey;
         $this->arrForeignKeys = $arrForeignKeys;
     }
 
@@ -41,10 +44,11 @@ class GeneratorFilterInputHelper
         $strDeclaracaoDoInputFilter = $this->getStrDeclaracaoDoInputFilter();
 
         $strCreateInput = $this->getComment();
-        $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getInicializacaoInputFilter();
+        $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getInicializacaoInputFilter() . PHP_EOL;
         $strCreateInput .= $strDeclaracaoDoInputFilter . PHP_EOL . $this->getStrRequired() . PHP_EOL;
         $strCreateInput .= $this->getFilters() . PHP_EOL;
         $strCreateInput .= $strDeclaracaoDoInputFilter . $this->getValidators() . PHP_EOL;
+        $strCreateInput .= '$this->add(' . $strDeclaracaoDoInputFilter . ');' . PHP_EOL . PHP_EOL;
 
         return $strCreateInput;
     }
@@ -75,7 +79,7 @@ class GeneratorFilterInputHelper
      */
     private function getInicializacaoInputFilter()
     {
-        return ' = new Input("' . $this->underscoreToLowerCamelcase($this->objColumn->getName()) . '");' . PHP_EOL;
+        return ' = new Input("' . $this->underscoreToLowerCamelcase($this->objColumn->getName()) . '");';
     }
 
     /**
@@ -83,7 +87,16 @@ class GeneratorFilterInputHelper
      */
     private function getStrRequired()
     {
-        return '->setRequired(' . $this->objColumn->getNotnull() . ')' . PHP_EOL;
+        $booRequired = 'false';
+
+        #chaves primarias nao sao obrigatorias, para que seja possivel utilizar o mesmo form para update e insert
+        if ($this->booIsPrimaryKey) {
+            $booRequired = 'false';
+        } elseif ($this->objColumn->getNotnull()) {
+            $booRequired = 'true';
+        }
+
+        return '->setRequired(' . (string) $booRequired . ')';
     }
 
     /**
@@ -102,8 +115,7 @@ class GeneratorFilterInputHelper
     private function getValidators()
     {
         return '->getValidatorChain()' . PHP_EOL . $this->getValidatorsType() .
-        $this->getValidatorStringLength() .
-        $this->getValidatorInArray() . ';' . PHP_EOL;
+        $this->getValidatorInArray() . ';';
     }
 
     /**
@@ -114,14 +126,26 @@ class GeneratorFilterInputHelper
         $strValidatorsType = '';
         $objType = $this->objColumn->getType();
 
-        if (count($this->arrForeignKeys)) {
-            $strValidatorsType = '';
-        } elseif ($objType == "Integer") {
-            $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsInt())' . PHP_EOL;
-        } elseif ($objType == "DateTime") {
-            $strValidatorsType = '->attach(new \Zend\Validator\Date(["locale" => "pt_BR"]))' . PHP_EOL;
-        } elseif ($objType == "Float") {
-            $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))' . PHP_EOL;
+        switch ($objType) {
+            case 'Integer':
+                $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsInt())';
+                break;
+
+            case 'DateTime':
+                $strValidatorsType = '->attach(new \Zend\Validator\Date(["locale" => "pt_BR", "format" => "d-m-Y"]))';
+                break;
+
+            case 'Float':
+                $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))';
+                break;
+
+            case 'String':
+                $strValidatorsType = $this->getValidatorStringLength();
+                break;
+
+            default:
+                //sem filtros
+                break;
         }
 
         return $strValidatorsType;
@@ -133,7 +157,7 @@ class GeneratorFilterInputHelper
      */
     private function getValidatorStringLength()
     {
-        $intMaxLength = $this->objColumn->getPrecision();
+        $intMaxLength = $this->objColumn->getLength();
         $strValidatorStringLength = '';
 
         if ($intMaxLength) {

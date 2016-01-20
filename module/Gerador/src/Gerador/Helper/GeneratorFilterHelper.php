@@ -15,11 +15,24 @@ use Zend\Code\Generator\MethodGenerator;
  */
 class GeneratorFilterHelper
 {
+    /**
+     * @var EntityManager
+     */
     private $em;
     private $schema;
+
+    /**
+     * @var \Doctrine\DBAL\Schema\Table
+     */
+    private $objTable;
+
+    /**
+     * @var \Doctrine\DBAL\Schema\Index
+     */
+    private $objPrimaryKeys;
+
     private $dirHelper;
     private $newFilter;
-    private $objTable;
     private $arrForeignKeys;
 
     /**
@@ -64,6 +77,7 @@ class GeneratorFilterHelper
         $this->dirHelper->initParams($arrInfosFilter);
         $this->objTable = $this->schema->getTable($arrInfosFilter['strTableName']);
         $arrForeignKeys = $this->objTable->getForeignKeys();
+        $this->arrPrimaryKeys = $this->objTable->getPrimaryKey();
         foreach ($arrForeignKeys as $arrForeignKey) {
             $this->arrForeignKeys[$arrForeignKey->getColumns()[0]] = [
                 'strColumns' => $arrForeignKey->getColumns()[0],
@@ -188,17 +202,46 @@ class GeneratorFilterHelper
         $objColumns = $this->objTable->getColumns();
 
         foreach ($objColumns as $objColumn) {
-            $arrForeignKey = [];
-            if (array_key_exists($objColumn->getName(), $this->arrForeignKeys)) {
-                $arrForeignKey = $this->arrForeignKeys[$objColumn->getName()];
-            }
             $generatorInputFilterHelper = new GeneratorFilterInputHelper(
                 $objColumn,
-                $arrForeignKey
+                $this->isPrimaryKey($objColumn),
+                $this->isForeignKey($objColumn)
             );
             $strInputs .= $generatorInputFilterHelper->getStrCreateInputFilter();
         }
 
         return $strInputs;
+    }
+
+    /**
+     * Metodo para verificar se a coluna eh chave primaria
+     *
+     * @param $objColumn
+     * @return bool
+     */
+    private function isPrimaryKey($objColumn)
+    {
+        $booIsPrimaryKey = false;
+        if (is_int(array_search($objColumn->getName(), $this->objTable->getPrimaryKey()->getColumns()))) {
+            $booIsPrimaryKey = true;
+        }
+        return $booIsPrimaryKey;
+    }
+
+    /**
+     * Metodo que verifica se a coluna eh foreign key, caso for - retorna os dados da chave estrangeira
+     *
+     * @param $objColumn
+     * @return array
+     */
+    private function isForeignKey($objColumn)
+    {
+        $arrForeignKey = [];
+
+        if (array_key_exists($objColumn->getName(), $this->arrForeignKeys)) {
+            $arrForeignKey = $this->arrForeignKeys[$objColumn->getName()];
+        }
+
+        return $arrForeignKey;
     }
 }

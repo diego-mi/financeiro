@@ -1,6 +1,6 @@
 <?php
 
-namespace Testee\Form;
+namespace Teste\Form;
 
 use Zend\InputFilter\InputFilter;
 use Zend\Filter\StringTrim;
@@ -33,16 +33,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterId = new Input("id");
         $filterId
-            ->setRequired(1)
+            ->setRequired(false)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterId->getValidatorChain()
-            ->attach(new \Zend\I18n\Validator\IsInt())
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]));
+            ->attach(new \Zend\I18n\Validator\IsInt());
+        $this->add($filterId);
 
         /**
          * Filter Categoria
@@ -50,16 +47,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterCategoria = new Input("categoria");
         $filterCategoria
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterCategoria->getValidatorChain()
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]))
-            ->attach(new \Zend\Validator\InArray(["haystack" => $categoria]));
+            ->attach(new \Zend\I18n\Validator\IsInt())->attach(new \Zend\Validator\InArray(["haystack" => $categoria]));
+        $this->add($filterCategoria);
 
         /**
          * Filter Operacao
@@ -67,16 +61,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterOperacao = new Input("operacao");
         $filterOperacao
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterOperacao->getValidatorChain()
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]))
-            ->attach(new \Zend\Validator\InArray(["haystack" => $operacao]));
+            ->attach(new \Zend\I18n\Validator\IsInt())->attach(new \Zend\Validator\InArray(["haystack" => $operacao]));
+        $this->add($filterOperacao);
 
         /**
          * Filter Origem
@@ -84,16 +75,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterOrigem = new Input("origem");
         $filterOrigem
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterOrigem->getValidatorChain()
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]))
-            ->attach(new \Zend\Validator\InArray(["haystack" => $origem]));
+            ->attach(new \Zend\I18n\Validator\IsInt())->attach(new \Zend\Validator\InArray(["haystack" => $origem]));
+        $this->add($filterOrigem);
 
         /**
          * Filter Tipo
@@ -101,16 +89,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterTipo = new Input("tipo");
         $filterTipo
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterTipo->getValidatorChain()
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]))
-            ->attach(new \Zend\Validator\InArray(["haystack" => $tipo]));
+            ->attach(new \Zend\I18n\Validator\IsInt())->attach(new \Zend\Validator\InArray(["haystack" => $tipo]));
+        $this->add($filterTipo);
 
         /**
          * Filter Prioridade
@@ -118,16 +103,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterPrioridade = new Input("prioridade");
         $filterPrioridade
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterPrioridade->getValidatorChain()
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]))
-            ->attach(new \Zend\Validator\InArray(["haystack" => $prioridade]));
+            ->attach(new \Zend\I18n\Validator\IsInt())->attach(new \Zend\Validator\InArray(["haystack" => $prioridade]));
+        $this->add($filterPrioridade);
 
         /**
          * Filter DataLancamento
@@ -135,16 +117,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterDataLancamento = new Input("dataLancamento");
         $filterDataLancamento
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterDataLancamento->getValidatorChain()
-            ->attach(new \Zend\Validator\Date(["locale" => "pt_BR"]))
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]));
+            ->attach(new \Zend\Validator\Date(["locale" => "pt_BR", "format" => "d-m-Y"]));
+        $this->add($filterDataLancamento);
 
         /**
          * Filter DataPagamento
@@ -152,16 +131,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterDataPagamento = new Input("dataPagamento");
         $filterDataPagamento
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterDataPagamento->getValidatorChain()
-            ->attach(new \Zend\Validator\Date(["locale" => "pt_BR"]))
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]));
+            ->attach(new \Zend\Validator\Date(["locale" => "pt_BR", "format" => "d-m-Y"]));
+        $this->add($filterDataPagamento);
 
         /**
          * Filter ValorInicial
@@ -169,16 +145,13 @@ class LancamentosFilter extends InputFilter
          */
         $filterValorInicial = new Input("valorInicial");
         $filterValorInicial
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterValorInicial->getValidatorChain()
-            ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]));
+            ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]));
+        $this->add($filterValorInicial);
 
         /**
          * Filter ValorFinal
@@ -186,18 +159,12 @@ class LancamentosFilter extends InputFilter
          */
         $filterValorFinal = new Input("valorFinal");
         $filterValorFinal
-            ->setRequired(1)
+            ->setRequired(true)
             ->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags());
         $filterValorFinal->getValidatorChain()
-            ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))
-            ->attach(new StringLength([
-                "max" => 10,
-                "message" => "Atingiu o limite de caracteres"
-            ]));
+            ->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]));
+        $this->add($filterValorFinal);
     }
-
-
 }
-
