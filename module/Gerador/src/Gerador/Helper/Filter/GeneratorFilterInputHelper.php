@@ -2,15 +2,17 @@
 
 namespace Gerador\Helper\Filter;
 
+use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\FloatType;
+use Doctrine\DBAL\Types\IntegerType;
 use Gerador\Common\Nomenclatura;
 use Doctrine\DBAL\Schema\Column;
-use Zend\Validator\InArray;
 
 /**
- * Class GeneratorFilterInputTypeFloat
+ * Class GeneratorFilterInputHelper
  * @package Gerador\Helper\Filter
  */
-class GeneratorFilterInputTypeFloat
+class GeneratorFilterInputHelper
 {
     use Nomenclatura;
 
@@ -25,8 +27,7 @@ class GeneratorFilterInputTypeFloat
     public function __construct(Column $objColumn, $arrForeignKeys)
     {
         $this->objColumn = $objColumn;
-        $this->arrForeignKeys = $arrForeignKeys[$this->objColumn->getName()];
-
+        $this->arrForeignKeys = $arrForeignKeys;
     }
 
     /**
@@ -56,7 +57,7 @@ class GeneratorFilterInputTypeFloat
     {
         return
             '/**' . PHP_EOL .
-            '* Column ' . $this->objColumn->getName() . PHP_EOL .
+            '* Filter ' . $this->underscoreToCamelcase($this->objColumn->getName()) . PHP_EOL .
             '* Type ' . $this->objColumn->getType() . PHP_EOL .
             '*/' . PHP_EOL;
     }
@@ -74,7 +75,7 @@ class GeneratorFilterInputTypeFloat
      */
     private function getInicializacaoInputFilter()
     {
-        return ' = new Input("' . $this->underscoreToLowerCamelcase($this->objColumn->getName()) . '");'  . PHP_EOL;
+        return ' = new Input("' . $this->underscoreToLowerCamelcase($this->objColumn->getName()) . '");' . PHP_EOL;
     }
 
     /**
@@ -101,8 +102,8 @@ class GeneratorFilterInputTypeFloat
     private function getValidators()
     {
         return '->getValidatorChain()' . PHP_EOL . $this->getValidatorsType() .
-            $this->getValidatorStringLength() .
-            $this->getValidatorInArray() . ';' . PHP_EOL;
+        $this->getValidatorStringLength() .
+        $this->getValidatorInArray() . ';' . PHP_EOL;
     }
 
     /**
@@ -110,7 +111,20 @@ class GeneratorFilterInputTypeFloat
      */
     private function getValidatorsType()
     {
-        return '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))' . PHP_EOL;
+        $strValidatorsType = '';
+        $objType = $this->objColumn->getType();
+
+        if (count($this->arrForeignKeys)) {
+            $strValidatorsType = '';
+        } elseif ($objType == "Integer") {
+            $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsInt())' . PHP_EOL;
+        } elseif ($objType == "DateTime") {
+            $strValidatorsType = '->attach(new \Zend\Validator\Date(["locale" => "pt_BR"]))' . PHP_EOL;
+        } elseif ($objType == "Float") {
+            $strValidatorsType = '->attach(new \Zend\I18n\Validator\IsFloat(["locale" => "pt_BR"]))' . PHP_EOL;
+        }
+
+        return $strValidatorsType;
     }
 
 
@@ -124,7 +138,7 @@ class GeneratorFilterInputTypeFloat
 
         if ($intMaxLength) {
             $strValidatorStringLength = PHP_EOL . '->attach(new StringLength([' . PHP_EOL .
-                '"max" => '. $intMaxLength .',' . PHP_EOL .
+                '"max" => ' . $intMaxLength . ',' . PHP_EOL .
                 '"message" => "Atingiu o limite de caracteres"' . PHP_EOL .
                 ']))' . PHP_EOL;
         }
@@ -141,7 +155,7 @@ class GeneratorFilterInputTypeFloat
         $strValidatorInArray = '';
         if ($this->arrForeignKeys) {
             $strValidatorInArray = '->attach(new \Zend\Validator\InArray(["haystack" => $' .
-                $this->objColumn->getName() .']))';
+                $this->objColumn->getName() . ']))';
         }
         return $strValidatorInArray;
     }

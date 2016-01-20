@@ -2,6 +2,7 @@
 namespace Gerador\Helper;
 
 use Doctrine\ORM\EntityManager;
+use Gerador\Helper\Filter\GeneratorFilterInputHelper;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\DocBlock\Tag;
@@ -133,7 +134,7 @@ class GeneratorFilterHelper
             $arrTags[] = new Tag\ParamTag(
                 $arrParameter,
                 'array',
-                'Valores da tabela ' . $this->arrForeignKeys[$arrParameter]
+                'Valores da tabela ' . $this->arrForeignKeys[$arrParameter]['strColumns']
             );
         }
 
@@ -183,11 +184,19 @@ class GeneratorFilterHelper
     private function getInputs()
     {
         $strInputs = '';
-        $generatorInputFilterHelper = new GeneratorInputFilterHelper();
+
         $objColumns = $this->objTable->getColumns();
 
         foreach ($objColumns as $objColumn) {
-            $strInputs .= $generatorInputFilterHelper->createInput($objColumn, $this->arrForeignKeys);
+            $arrForeignKey = [];
+            if (array_key_exists($objColumn->getName(), $this->arrForeignKeys)) {
+                $arrForeignKey = $this->arrForeignKeys[$objColumn->getName()];
+            }
+            $generatorInputFilterHelper = new GeneratorFilterInputHelper(
+                $objColumn,
+                $arrForeignKey
+            );
+            $strInputs .= $generatorInputFilterHelper->getStrCreateInputFilter();
         }
 
         return $strInputs;
