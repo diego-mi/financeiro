@@ -69,7 +69,7 @@ class IndexController extends AbstractActionController
                 $arrDataFromForm = $form->getData();
 
                 try {
-                    $service->createForm($arrDataFromForm);
+                    $service->createFormInepzend($arrDataFromForm);
                     //return $this->redirect()
                     //    ->toRoute($this->route, array('controller' => 'gerador', 'action' => 'criarController'));
                 } catch (\Exception $objException) {
@@ -102,7 +102,8 @@ class IndexController extends AbstractActionController
                 $arrDataFromForm = $form->getData();
 
                 try {
-                    $service->createFilter($arrDataFromForm);
+                    #$service->createFilter($arrDataFromForm);
+                    $service->createFilterInepzend($arrDataFromForm);
                     //return $this->redirect()
                     //    ->toRoute($this->route, array('controller' => 'gerador', 'action' => 'criarController'));
                 } catch (\Exception $objException) {

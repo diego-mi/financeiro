@@ -5,6 +5,8 @@ use Doctrine\ORM\EntityManager;
 use Gerador\Helper\GeneratorControllerHelper;
 use Gerador\Helper\GeneratorFilterHelper;
 use Gerador\Helper\GeneratorFormHelper;
+use Gerador\Helper\Inepzend\Form\GeneratorInepzendFormHelper;
+use Gerador\Helper\Inepzend\Filter\GeneratorInepzendFilterHelper;
 
 /**
  * Class GeradorService
@@ -24,9 +26,11 @@ class GeradorService
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+        $this->generatorInepzendFilterHelper = new GeneratorInepzendFilterHelper($em);
         $this->gerenciarDiretorioService = new GerenciarDiretorioService();
         $this->generatorControllerHelper = new GeneratorControllerHelper();
         $this->generatorFormHelper = new GeneratorFormHelper($em);
+        $this->generatorInepzendFormHelper = new GeneratorInepzendFormHelper($em);
         $this->generatorFilterHelper = new GeneratorFilterHelper($em);
     }
 
@@ -81,25 +85,22 @@ class GeradorService
         return false;
     }
 
+    /**
+     * Metodo responsavel por criar um form
+     *
+     * @param array $arrInfosForm
+     * @return bool
+     */
+    public function createFormInepzend(Array $arrInfosForm = array())
+    {
+        if ($this->isValidName($arrInfosForm['strTableName'])) {
+            if ($this->gerenciarDiretorioService->createAllDir($arrInfosForm)) {
+                $this->generatorInepzendFormHelper->createNewForm($arrInfosForm);
+            }
+        }
 
-//    /**
-//     * @param array $arrInfosForm
-//     * @return bool
-//     */
-//    public function createAllForms(Array $arrInfosForm = array())
-//    {
-//        $arrTables = $this->em->getConnection()->getSchemaManager()->createSchema()->getTables();
-//
-//        foreach ($arrTables as $objTable) {
-//            $arrInfosForm['strTableName'] = $objTable->getName();
-//            $arrInfosForm['strFormName'] = ucfirst($objTable->getName()) . 'Form';
-//            $arrInfosForm['strFilterName'] = ucfirst($objTable->getName()) . 'Filter';
-//            $this->createForm($arrInfosForm);
-//        }
-//
-//        return false;
-//    }
-
+        return false;
+    }
 
     /**
      * Metodo responsavel por criar um filter para um form
@@ -112,6 +113,24 @@ class GeradorService
         if ($this->isValidName($arrInfosForm['strTableName'])) {
             if ($this->gerenciarDiretorioService->createAllDir($arrInfosForm)) {
                 $this->generatorFilterHelper->createNewFilter($arrInfosForm);
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Metodo responsavel por criar um filter para um form
+     *
+     * @param array $arrInfosForm
+     * @return bool
+     */
+    public function createFilterInepzend(Array $arrInfosForm = array())
+    {
+        if ($this->isValidName($arrInfosForm['strTableName'])) {
+            if ($this->gerenciarDiretorioService->createAllDir($arrInfosForm)) {
+                $this->generatorInepzendFilterHelper->createNewFilter($arrInfosForm);
             }
         }
 
